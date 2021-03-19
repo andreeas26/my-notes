@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>A basic Learner | My notes</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="A basic Learner" />
+<meta name="author" content="Andreea Sandu" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="How to write from scratch a SGD loop" />
+<meta property="og:description" content="How to write from scratch a SGD loop" />
+<link rel="canonical" href="https://andreeas26.github.io/my-notes/fastpages/jupyter/learner/machine%20learning/2021/03/19/basic-learner.html" />
+<meta property="og:url" content="https://andreeas26.github.io/my-notes/fastpages/jupyter/learner/machine%20learning/2021/03/19/basic-learner.html" />
+<meta property="og:site_name" content="My notes" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-03-19T00:00:00-05:00" />
+<script type="application/ld+json">
+{"url":"https://andreeas26.github.io/my-notes/fastpages/jupyter/learner/machine%20learning/2021/03/19/basic-learner.html","@type":"BlogPosting","headline":"A basic Learner","dateModified":"2021-03-19T00:00:00-05:00","datePublished":"2021-03-19T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://andreeas26.github.io/my-notes/fastpages/jupyter/learner/machine%20learning/2021/03/19/basic-learner.html"},"author":{"@type":"Person","name":"Andreea Sandu"},"description":"How to write from scratch a SGD loop","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/my-notes/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://andreeas26.github.io/my-notes/feed.xml" title="My notes" /><link rel="shortcut icon" type="image/x-icon" href="/my-notes/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/my-notes/">My notes</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/my-notes/about/">About Me</a><a class="page-link" href="/my-notes/search/">Search</a><a class="page-link" href="/my-notes/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">A basic Learner</h1><p class="page-description">How to write from scratch a SGD loop</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2021-03-19T00:00:00-05:00" itemprop="datePublished">
+        Mar 19, 2021
+      </time>• 
+          <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <span class="p-author h-card" itemprop="name">Andreea Sandu</span></span>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      3 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/my-notes/categories/#fastpages">fastpages</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/my-notes/categories/#jupyter">jupyter</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/my-notes/categories/#learner">learner</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/my-notes/categories/#machine learning">machine learning</a>
+        
+      
+      </p>
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-wrap flex-justify-end">
+          <div class="px-2">
+
+    <a href="https://github.com/andreeas26/my-notes/tree/master/_notebooks/2021-03-19-basic-learner.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/my-notes/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/andreeas26/my-notes/master?filepath=_notebooks%2F2021-03-19-basic-learner.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/my-notes/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/andreeas26/my-notes/blob/master/_notebooks/2021-03-19-basic-learner.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/my-notes/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2021-03-19-basic-learner.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Intro">Intro<a class="anchor-link" href="#Intro"> </a></h2><p>I have recently started the <a href="https://course.fast.ai/">fastai course v4</a> after many postponements. Although I have been working with AI for a few years now I always thought Jeremy Howard's approach of teaching it's very interesting and ... different. Learning the <em>whole game</em> from the start it's more appealing than learning what a tensor is. From the very start the course takes you through the whole process of developing an AI model and into deployment. I believe when the first version of the course was published AI was just beginning to be popular and many of the libraries and resources were <em>not yet invented</em>. Now they have all these cool tools to present the entire lifecycle while the students can better see the big picture.  This is just a testament of how much the community has evolved and how the <em>fastai</em> team has succesfully managed to keep up the pace!</p>
+<p>fastai through the voice of Rachel Thomas encourages its students to start blogging. Another uncommon idea. What learning deep learning has anything to do with writing? <a href="https://medium.com/@racheltho/why-you-yes-you-should-blog-7d2544ac1045">Here</a> you can find some good points about why blogging helps. Through this blog post (and maybe others that will follow) I want to test their hypothesis. I just want to try it and see how it goes.</p>
+<p>So, without further ado let's get our hands dirty with some deep learning.</p>
+<p><img src="https://github.com/andreeas26/my-notes/blob/master/images/fastpages_posts/dl_meme.jpg" alt="meme" /></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Write-a-basic-Learner">Write a basic Learner<a class="anchor-link" href="#Write-a-basic-Learner"> </a></h2><p>In this section I'll explain how I created a <strong><em>Learner</em></strong> from scratch by following the 7 steps for developing any deep learning model.</p>
+<ol>
+<li>Initialize the parameters of the network;</li>
+<li>Predict on some input data;</li>
+<li>Compute the loss function. In other words how the predictions are different from the target (what we actually want);</li>
+<li>Compute the parameters' gradients;</li>
+<li>Update the parameters using backpropagation;</li>
+<li>Repeat</li>
+<li>Stop</li>
+</ol>
+<p>For this purpose I'll use the same MNIST_SAMPLE dataset that it's used in the book. It only contains the digits three and seven, so we'll start simple by resolving a binary classification problem. The fastai library provides some useful and easy to understand functions in order to get up and going realy quickly. I will not go into details about them.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This is my implementation of a basic Learner that puts together all the necessary "ingredients" in order to train simple neural network:</p>
+<ul>
+<li><code>dls</code>: the data</li>
+<li><code>model</code>: the neural network</li>
+<li><code>opt_func</code>: optimization rule</li>
+<li><code>loss_func</code>: it's used by the model</li>
+<li><code>metrics</code>: the metrics we care about</li>
+</ul>
+<p>The function that does all the work is <code>fit()</code>. It updates the parameters of the network a number of <code>epochs</code> by geting a batch of input - target pairs from the train DataLoader (specified in <code>dls</code> parameter). The predictions from each batch are compared with the targets and based on these differences the gradiends are updated with a step set by <code>lr</code>. The last for loop it's for validation, where we are intereseted in the model performance on unseen data and its parameters are <strong>not</strong> updated. We're also do some brief logging after each epoch ends.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">BasicLearner</span><span class="p">:</span>
+  <span class="vm">__name__</span> <span class="o">=</span> <span class="s1">&#39;BasicLearner&#39;</span>
+  <span class="fm">__repr__</span> <span class="o">=</span> <span class="n">basic_repr</span><span class="p">(</span><span class="s1">&#39;dls,model,opt_func,loss_func,metrics&#39;</span><span class="p">)</span>
+
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dls</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">opt_func</span><span class="p">,</span> <span class="n">loss_func</span><span class="p">,</span> <span class="n">metrics</span><span class="p">):</span>
+    <span class="n">store_attr</span><span class="p">(</span><span class="s1">&#39;dls,model,opt_func,loss_func,metrics&#39;</span><span class="p">)</span>
+  
+  <span class="k">def</span> <span class="nf">_reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">train_loss</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">val_loss</span> <span class="o">=</span> <span class="p">[]</span>
+
+  <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">):</span>
+    <span class="n">opt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">opt_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="n">lr</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_reset</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epochs</span><span class="p">):</span>
+      <span class="n">batch_train_loss</span> <span class="o">=</span> <span class="p">[]</span>
+      <span class="k">for</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dls</span><span class="o">.</span><span class="n">train</span><span class="p">:</span>
+        <span class="n">pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss_func</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="n">batch_train_loss</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">loss</span><span class="p">)</span>
+        <span class="n">opt</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+        <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+        <span class="n">opt</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+      <span class="n">batch_train_loss</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">batch_train_loss</span><span class="p">)</span>
+
+      <span class="n">batch_val_loss</span> <span class="o">=</span> <span class="p">[]</span>
+      <span class="n">val_metrics</span> <span class="o">=</span> <span class="p">[]</span>
+      <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dls</span><span class="o">.</span><span class="n">valid</span><span class="p">:</span>
+          <span class="n">pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+          <span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss_func</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+          <span class="n">batch_val_loss</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">loss</span><span class="p">)</span>
+          <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+          <span class="n">val_metrics</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+
+      <span class="n">batch_val_loss</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">batch_val_loss</span><span class="p">)</span>
+      <span class="n">val_metrics</span> <span class="o">=</span> <span class="n">tensor</span><span class="p">(</span><span class="n">val_metrics</span><span class="p">)</span>
+
+      <span class="bp">self</span><span class="o">.</span><span class="n">train_loss</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">batch_train_loss</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">val_loss</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">batch_val_loss</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+
+      <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Epoch </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">epochs</span><span class="si">}</span><span class="s2">: &quot;</span> \
+        <span class="sa">f</span><span class="s2">&quot;Train loss </span><span class="si">{</span><span class="n">batch_train_loss</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> &quot;</span> \
+        <span class="sa">f</span><span class="s2">&quot;Valid loss </span><span class="si">{</span><span class="n">batch_val_loss</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> &quot;</span> \
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">val_metrics</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span>
+      <span class="nb">print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let's see how it works on the MNIST_SAMPLE dataset. You can check the implemention of all the parameters given to <code>BasicLearner</code> class, on github.
+The basic network will train for 20 epochs with a learning rate of 0.1. After just a few epochs the model has over 90% accuracy.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">learn</span> <span class="o">=</span> <span class="n">BasicLearner</span><span class="p">(</span><span class="n">dls</span><span class="p">,</span> <span class="n">basic_net</span><span class="p">,</span> <span class="n">BasicOptim</span><span class="p">,</span> <span class="n">mnist_loss</span><span class="p">,</span> <span class="n">mnist_accuracy</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">learn</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">learn</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+</div>
+
+
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="andreeas26/my-notes"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/my-notes/fastpages/jupyter/learner/machine%20learning/2021/03/19/basic-learner.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/my-notes/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/my-notes/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/my-notes/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Notes on various topics I am currently learning.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/andreeas26" title="andreeas26"><svg class="svg-icon grey"><use xlink:href="/my-notes/assets/minima-social-icons.svg#github"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
