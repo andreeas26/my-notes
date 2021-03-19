@@ -170,44 +170,6 @@ window.onload = wrap_img;
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span>pip install -Uqq fastbook
-<span class="kn">import</span> <span class="nn">fastbook</span>
-<span class="n">fastbook</span><span class="o">.</span><span class="n">setup_book</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    
-
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">fastai.vision.all</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">fastbook</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    
-
-    
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">path</span> <span class="o">=</span> <span class="n">untar_data</span><span class="p">(</span><span class="n">URLs</span><span class="o">.</span><span class="n">MNIST_SAMPLE</span><span class="p">)</span>
 <span class="n">path</span><span class="o">.</span><span class="n">ls</span><span class="p">()</span>
 </pre></div>
@@ -224,7 +186,7 @@ window.onload = wrap_img;
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>(#3) [Path(&#39;/root/.fastai/data/mnist_sample/labels.csv&#39;),Path(&#39;/root/.fastai/data/mnist_sample/valid&#39;),Path(&#39;/root/.fastai/data/mnist_sample/train&#39;)]</pre>
+<pre>(#3) [Path(&#39;C:/Users/andreea.sandu/.fastai/data/mnist_sample/labels.csv&#39;),Path(&#39;C:/Users/andreea.sandu/.fastai/data/mnist_sample/train&#39;),Path(&#39;C:/Users/andreea.sandu/.fastai/data/mnist_sample/valid&#39;)]</pre>
 </div>
 
 </div>
@@ -330,7 +292,7 @@ window.onload = wrap_img;
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>(#2) [Path(&#39;/root/.fastai/data/mnist_sample/train/7&#39;),Path(&#39;/root/.fastai/data/mnist_sample/train/3&#39;)]</pre>
+<pre>(#2) [Path(&#39;C:/Users/andreea.sandu/.fastai/data/mnist_sample/train/3&#39;),Path(&#39;C:/Users/andreea.sandu/.fastai/data/mnist_sample/train/7&#39;)]</pre>
 </div>
 
 </div>
@@ -672,7 +634,7 @@ The basic network will train for 20 epochs with a learning rate of 0.1. After ju
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>BasicLearner(dls=&lt;fastai.data.core.DataLoaders object at 0x7f2c1c21e1d0&gt;, model=Basic2LayersNet(l1_size=(784, 30), l2_size=(30, 1), sigmoid=True), opt_func=&lt;class &#39;__main__.BasicOptim&#39;&gt;, loss_func=&lt;function mnist_loss at 0x7f2c1c2b9830&gt;, metrics=&lt;function mnist_accuracy at 0x7f2c1c2b95f0&gt;)
+<pre>BasicLearner(dls=&lt;fastai.data.core.DataLoaders object at 0x000001A1C4F52BA8&gt;, model=Basic2LayersNet(l1_size=(784, 30), l2_size=(30, 1), sigmoid=True), opt_func=&lt;class &#39;__main__.BasicOptim&#39;&gt;, loss_func=&lt;function mnist_loss at 0x000001A1C4F57378&gt;, metrics=&lt;function mnist_accuracy at 0x000001A1C4F57B70&gt;)
 </pre>
 </div>
 </div>
@@ -703,26 +665,26 @@ The basic network will train for 20 epochs with a learning rate of 0.1. After ju
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Epoch 0/20: Train loss 0.5973 Valid loss 0.5052 mnist_accuracy 0.50
-Epoch 1/20: Train loss 0.5023 Valid loss 0.4883 mnist_accuracy 0.51
-Epoch 2/20: Train loss 0.3698 Valid loss 0.4163 mnist_accuracy 0.58
-Epoch 3/20: Train loss 0.1523 Valid loss 0.3092 mnist_accuracy 0.69
-Epoch 4/20: Train loss 0.1131 Valid loss 0.1632 mnist_accuracy 0.84
-Epoch 5/20: Train loss 0.0843 Valid loss 0.1107 mnist_accuracy 0.89
-Epoch 6/20: Train loss 0.0750 Valid loss 0.0910 mnist_accuracy 0.91
-Epoch 7/20: Train loss 0.0683 Valid loss 0.0794 mnist_accuracy 0.92
-Epoch 8/20: Train loss 0.0631 Valid loss 0.0693 mnist_accuracy 0.93
-Epoch 9/20: Train loss 0.0590 Valid loss 0.0643 mnist_accuracy 0.94
-Epoch 10/20: Train loss 0.0570 Valid loss 0.0602 mnist_accuracy 0.94
-Epoch 11/20: Train loss 0.0546 Valid loss 0.0568 mnist_accuracy 0.94
-Epoch 12/20: Train loss 0.0513 Valid loss 0.0545 mnist_accuracy 0.94
-Epoch 13/20: Train loss 0.0497 Valid loss 0.0524 mnist_accuracy 0.95
-Epoch 14/20: Train loss 0.0491 Valid loss 0.0512 mnist_accuracy 0.95
-Epoch 15/20: Train loss 0.0483 Valid loss 0.0504 mnist_accuracy 0.95
-Epoch 16/20: Train loss 0.0473 Valid loss 0.0496 mnist_accuracy 0.95
-Epoch 17/20: Train loss 0.0464 Valid loss 0.0488 mnist_accuracy 0.95
-Epoch 18/20: Train loss 0.0453 Valid loss 0.0477 mnist_accuracy 0.95
-Epoch 19/20: Train loss 0.0442 Valid loss 0.0464 mnist_accuracy 0.95
+<pre>Epoch 0/20: Train loss 0.2879 Valid loss 0.3009 mnist_accuracy 0.70
+Epoch 1/20: Train loss 0.1435 Valid loss 0.2375 mnist_accuracy 0.76
+Epoch 2/20: Train loss 0.1138 Valid loss 0.1562 mnist_accuracy 0.85
+Epoch 3/20: Train loss 0.0952 Valid loss 0.1114 mnist_accuracy 0.89
+Epoch 4/20: Train loss 0.0795 Valid loss 0.0899 mnist_accuracy 0.91
+Epoch 5/20: Train loss 0.0661 Valid loss 0.0755 mnist_accuracy 0.92
+Epoch 6/20: Train loss 0.0603 Valid loss 0.0662 mnist_accuracy 0.93
+Epoch 7/20: Train loss 0.0563 Valid loss 0.0619 mnist_accuracy 0.94
+Epoch 8/20: Train loss 0.0524 Valid loss 0.0590 mnist_accuracy 0.94
+Epoch 9/20: Train loss 0.0483 Valid loss 0.0559 mnist_accuracy 0.94
+Epoch 10/20: Train loss 0.0468 Valid loss 0.0530 mnist_accuracy 0.95
+Epoch 11/20: Train loss 0.0451 Valid loss 0.0513 mnist_accuracy 0.95
+Epoch 12/20: Train loss 0.0435 Valid loss 0.0503 mnist_accuracy 0.95
+Epoch 13/20: Train loss 0.0417 Valid loss 0.0497 mnist_accuracy 0.95
+Epoch 14/20: Train loss 0.0401 Valid loss 0.0492 mnist_accuracy 0.95
+Epoch 15/20: Train loss 0.0393 Valid loss 0.0486 mnist_accuracy 0.95
+Epoch 16/20: Train loss 0.0379 Valid loss 0.0480 mnist_accuracy 0.95
+Epoch 17/20: Train loss 0.0365 Valid loss 0.0471 mnist_accuracy 0.95
+Epoch 18/20: Train loss 0.0358 Valid loss 0.0465 mnist_accuracy 0.95
+Epoch 19/20: Train loss 0.0354 Valid loss 0.0461 mnist_accuracy 0.95
 </pre>
 </div>
 </div>
