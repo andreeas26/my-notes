@@ -9,7 +9,7 @@ search_exclude: false
 categories: [deep-learning, notes, learning-rate, data-augmentation, error-analysis]
 ---
 
-![](/images/fastpages_posts/toolbox.gif)
+![]({{ site.baseurl }}/images/fastpages_posts/toolbox.gif)
 
 ## Presizing
 
